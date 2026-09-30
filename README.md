@@ -127,7 +127,7 @@ email: ispingos@geol.uoa.gr
 
 A citation will be provided soon.
 
-If you use this script, please make sure to also cite SeisBench [(Woollam et al., 2002)](https://doi.org/10.1785/0220210324) and the DL model used.
+If you use this script, please make sure to also cite SeisBench [(Woollam et al., 2022)](https://doi.org/10.1785/0220210324) and the DL model used.
 
 ## Funding
 
