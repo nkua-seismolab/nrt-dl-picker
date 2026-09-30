@@ -1,0 +1,21 @@
+seedlink:
+  host: "seedlink.server"
+  port: 18000
+  network: "*"
+  station: "*"
+  channel: "*"
+window:
+  length_s: 30
+  step_s: 10
+dedup:
+  enabled: true
+  tolerance_s: 1.0
+model:
+  name: "phasenet"
+  weights: "original"
+api:
+  url: "http://localhost:8100/picks"
+  key: "your-api-key-here"
+metadata:
+  author: "your-agency-id"
+log_level: "INFO"
