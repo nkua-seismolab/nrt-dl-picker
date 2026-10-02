@@ -28,7 +28,7 @@ import urllib.request
 import urllib.error
 from datetime import datetime, timezone
 from obspy import UTCDateTime, Stream
-from obspy.clients.seedlink.easyseedlink import create_client
+from obspy.clients.seedlink.easyseedlink import EasySeedLinkClient
 from obspy.clients.seedlink.basic_client import Client as BasicClient
 import seisbench.models as sbm
 
@@ -58,13 +58,17 @@ class SeedlinkBuffer:
             logging.error("No streams found matching the specified criteria.")
             sys.exit(1)
 
-        # Setup the SeedLink client with callbacks
-        self.client = create_client(
-            server_url, 
-            self.on_data,
-            # on_error=self.on_error,  # PENDING
-            on_terminate=self.on_terminate
-            )
+        # Setup the SeedLink client with callbacks.
+        # Built manually (instead of easyseedlink.create_client) so a
+        # connection timeout can be set before connecting; obspy >= 1.5
+        # leaves it as None, which crashes EasySeedLinkClient.connect().
+        self.client = EasySeedLinkClient(server_url, autoconnect=False)
+        if self.client.conn.timeout is None:
+            self.client.conn.timeout = 30
+        self.client.on_data = self.on_data
+        # self.client.on_seedlink_error = self.on_error  # PENDING
+        self.client.on_terminate = self.on_terminate
+        self.client.connect()
         for seed in seed_streams:
             net, sta, _, cha = seed
             self.client.select_stream(
